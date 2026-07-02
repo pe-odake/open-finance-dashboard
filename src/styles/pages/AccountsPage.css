@@ -1,0 +1,311 @@
+.accounts-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.page-header-text h1 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.page-header-text p {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-secondary);
+  margin-top: 2px;
+}
+
+.btn-primary-sm {
+  height: var(--height-button);
+  padding: 0 var(--spacing-lg);
+  background-color: var(--color-primary-container);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  transition: background-color 0.15s;
+  white-space: nowrap;
+}
+
+.btn-primary-sm:hover {
+  background-color: var(--color-surface-tint);
+}
+
+.btn-primary-sm .material-symbols-outlined { font-size: 20px; }
+
+/* Accounts Grid */
+.accounts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-gutter);
+}
+
+@media (min-width: 768px) {
+  .accounts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .accounts-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.account-card {
+  background-color: var(--color-surface);
+  border: 0.5px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.account-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-card-bank {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.account-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.account-card-icon .material-symbols-outlined { font-size: 20px; }
+
+.account-card-bank-name {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.account-card-menu {
+  color: var(--color-secondary);
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-default);
+  transition: background-color 0.15s;
+}
+
+.account-card-menu:hover {
+  background-color: var(--color-surface-container-low);
+}
+
+.account-card-menu .material-symbols-outlined { font-size: 20px; }
+
+.account-card-status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.account-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-positive);
+}
+
+.account-status-text {
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--color-positive);
+}
+
+.account-card-balance-label {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-secondary);
+}
+
+.account-card-balance {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.account-card-sync {
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--color-secondary);
+}
+
+.account-card-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+}
+
+.btn-sync {
+  flex: 1;
+  height: 40px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  transition: background-color 0.15s;
+}
+
+.btn-sync:hover {
+  background-color: var(--color-surface-container-low);
+}
+
+.btn-delete {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  color: var(--color-negative);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.btn-delete:hover {
+  background-color: var(--color-negative-soft);
+  border-color: var(--color-negative);
+}
+
+.btn-delete .material-symbols-outlined { font-size: 20px; }
+
+/* Bottom Section */
+.accounts-bottom {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-gutter);
+}
+
+@media (min-width: 1024px) {
+  .accounts-bottom {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* Patrimony Overview card */
+.patrimony-card {
+  background-color: var(--color-surface);
+  border: 0.5px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+}
+
+.patrimony-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  height: 200px;
+}
+
+.patrimony-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.patrimony-bar {
+  width: 100%;
+  max-width: 80px;
+  border-radius: var(--radius-default) var(--radius-default) 0 0;
+}
+
+.patrimony-bar-label {
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--color-secondary);
+}
+
+.patrimony-bar-label-active {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* Security card */
+.security-card {
+  background-color: var(--color-surface);
+  border: 0.5px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.security-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-positive-soft);
+  color: var(--color-positive);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.security-icon .material-symbols-outlined { font-size: 22px; }
+
+.security-title {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.security-text {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-secondary);
+}
+
+.btn-outline-sm {
+  height: 40px;
+  padding: 0 var(--spacing-lg);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  align-self: flex-start;
+  transition: background-color 0.15s;
+}
+
+.btn-outline-sm:hover {
+  background-color: var(--color-surface-container-low);
+}

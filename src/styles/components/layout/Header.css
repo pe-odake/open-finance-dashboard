@@ -1,0 +1,138 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 0 var(--spacing-gutter);
+  flex-shrink: 0;
+  z-index: 40;
+}
+
+@media (min-width: 1024px) {
+  .header {
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header-greeting {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .header-greeting {
+    display: block;
+  }
+}
+
+.header-mobile-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+@media (min-width: 640px) {
+  .header-mobile-logo {
+    display: none;
+  }
+}
+
+.header-mobile-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.header-mobile-logo-icon .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.header-mobile-logo-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.header-sync-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: var(--color-surface-container-low);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.header-sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-positive);
+  display: inline-block;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.header-sync-text {
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--color-secondary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.header-icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--color-secondary);
+  transition: background-color 0.15s ease;
+}
+
+.header-icon-btn:hover {
+  background-color: var(--color-surface-container-low);
+}
+
+.header-icon-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--color-border-subtle);
+  flex-shrink: 0;
+  margin-left: var(--spacing-sm);
+  background-color: var(--color-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-primary);
+  font-size: 12px;
+  font-weight: 600;
+}

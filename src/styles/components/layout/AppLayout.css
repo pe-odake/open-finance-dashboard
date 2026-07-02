@@ -1,0 +1,35 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-layout-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.app-layout-content {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  padding: var(--spacing-gutter);
+  padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-gutter));
+}
+
+@media (min-width: 768px) {
+  .app-layout-content {
+    padding-bottom: var(--spacing-gutter);
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-layout-content {
+    padding: var(--spacing-xl);
+  }
+}
