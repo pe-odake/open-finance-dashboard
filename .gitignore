@@ -1,3 +1,16 @@
+# Dependências
+/node_modules
+.pnp
+.pnp.js
+
+# Diretório de Build
+/dist
+/dist-ssr
+
+# Diretório gerado pela instalação global/local
+.npm
+.yarn
+
 # Logs
 logs
 *.log
@@ -7,18 +20,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# Diretórios e arquivos de IDEs (ex: VS Code)
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Variáveis de ambiente locais
+.env
+.env.*.local
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db

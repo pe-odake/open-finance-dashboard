@@ -1,6 +1,19 @@
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import '../../styles/components/layout/Header.css'
 
 function Header() {
+  const { user } = useAuth();
+
+  // Gera as iniciais do nome (ex: "admin silva" → "AS")
+  const initials = user?.nome
+    ? user.nome.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
+    : '??';
+
+  // Pega o primeiro nome para a saudação
+  const firstName = user?.nome
+    ? user.nome.split(' ')[0]
+    : 'Usuário';
+
   return (
     <header className="header">
       {/* Left: Mobile logo + Greeting + Sync */}
@@ -13,8 +26,8 @@ function Header() {
           <span className="header-mobile-logo-text">Open Finance</span>
         </div>
 
-        {/* Desktop greeting */}
-        <h1 className="header-greeting">Bom dia, Pedro Demo</h1>
+        {/* MENSAGEM BOAS VINDAS */}
+        <h1 className="header-greeting">Olá, {firstName}</h1>
 
         {/* Sync chip */}
         <div className="header-sync-chip">
@@ -31,7 +44,7 @@ function Header() {
         <button className="header-icon-btn" title="Ajuda">
           <span className="material-symbols-outlined">help</span>
         </button>
-        <div className="header-avatar">PD</div>
+        <div className="header-avatar">{initials}</div>
       </div>
     </header>
   )

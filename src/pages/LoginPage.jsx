@@ -1,10 +1,33 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import '../styles/pages/LoginPage.css'
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
+
+  const [login, setLogin] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError("");
+
+    try {
+      await authLogin({ login, senha });
+      navigate("/dashboard");
+
+    } catch (error) {
+      console.error(error);
+      setLoginError(error.message || "Erro ao conectar com o servidor.");
+    }
+  };
+
   return (
     <div className="login-page">
-      {/* Left Brand Panel - Desktop Only */}
+      {/* PAINEL ESQUERDO */}
       <div className="login-brand">
         <div className="login-brand-logo">
           <span className="material-symbols-outlined filled">insights</span>
@@ -19,9 +42,9 @@ function LoginPage() {
         </div>
       </div>
 
-      {/* Right Form Panel */}
+      {/* PAINEL DIREITO DE FORM DE LOGIN */}
       <div className="login-form-wrapper">
-        {/* Mobile Logo */}
+        {/* MOBILE SIMBOLOS */}
         <div className="login-mobile-logo">
           <span className="material-symbols-outlined filled">insights</span>
           <span className="login-mobile-logo-text">Open Finance</span>
@@ -33,21 +56,24 @@ function LoginPage() {
             <p>Bem-vindo de volta! Por favor, insira seus dados.</p>
           </div>
 
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="login-fields">
-              {/* Email */}
+
+              {/* EMAIL/login */}
               <div className="form-field">
                 <label htmlFor="email">E-mail</label>
                 <input
                   className="form-input"
                   id="email"
-                  name="email"
+                  name="login"
                   type="email"
+                  onChange={(e) => setLogin(e.target.value)}
+                  value={login}
                   placeholder="nome@empresa.com"
                 />
               </div>
 
-              {/* Password */}
+              {/* SENHA */}
               <div className="form-field">
                 <div className="form-label-row">
                   <label htmlFor="password">Senha</label>
@@ -57,8 +83,10 @@ function LoginPage() {
                   <input
                     className="form-input"
                     id="password"
-                    name="password"
+                    name="senha"
                     type="password"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
                     placeholder="••••••••"
                   />
                   <button type="button" className="input-icon-btn">
@@ -68,7 +96,7 @@ function LoginPage() {
               </div>
             </div>
 
-            {/* Actions */}
+            {/* AÇÕES */}
             <div className="login-actions">
               <button type="submit" className="btn-primary">Entrar</button>
               <button type="button" className="btn-outline">

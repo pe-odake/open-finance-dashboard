@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './contexts/AuthContext.jsx'
 import AppLayout from './components/layout/AppLayout.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
@@ -9,26 +10,58 @@ import AnalysisPage from './pages/AnalysisPage.jsx'
 import ConsentsPage from './pages/ConsentsPage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
 
+function PrivateRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+  return children;
+}
+
 function App() {
   return (
     <Routes>
-      {/* Public routes - no layout */}
+      {/* AUTH */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      {/* Protected routes - with sidebar + header layout */}
-      <Route path="/dashboard" element={<AppLayout activePage="dashboard"><DashboardPage /></AppLayout>} />
-      <Route path="/accounts" element={<AppLayout activePage="accounts"><AccountsPage /></AppLayout>} />
-      <Route path="/transactions" element={<AppLayout activePage="transactions"><TransactionsPage /></AppLayout>} />
-      <Route path="/analysis" element={<AppLayout activePage="analysis"><AnalysisPage /></AppLayout>} />
-      <Route path="/consents" element={<AppLayout activePage="consents"><ConsentsPage /></AppLayout>} />
-      <Route path="/settings" element={<AppLayout activePage="settings"><SettingsPage /></AppLayout>} />
+      <Route path="/dashboard" element={
+        <PrivateRoute>
+          <AppLayout activePage="dashboard"><DashboardPage /></AppLayout>
+        </PrivateRoute>
+      } />
+      <Route path="/accounts" element={
+        <PrivateRoute>
+          <AppLayout activePage="accounts"><AccountsPage /></AppLayout>
+        </PrivateRoute>
+      } />
+      <Route path="/transactions" element={
+        <PrivateRoute>
+          <AppLayout activePage="transactions"><TransactionsPage /></AppLayout>
+        </PrivateRoute>
+      } />
+      <Route path="/analysis" element={
+        <PrivateRoute>
+          <AppLayout activePage="analysis"><AnalysisPage /></AppLayout>
+        </PrivateRoute>
+      } />
+      <Route path="/consents" element={
+        <PrivateRoute>
+          <AppLayout activePage="consents"><ConsentsPage /></AppLayout>
+        </PrivateRoute>
+      } />
+      <Route path="/settings" element={
+        <PrivateRoute>
+          <AppLayout activePage="settings"><SettingsPage /></AppLayout>
+        </PrivateRoute>
+      } />
 
-      {/* Default redirect */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* PADRAO */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
     </Routes>
   )
 }
 
 export default App
+

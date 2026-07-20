@@ -1,17 +1,26 @@
 import { Link, useLocation } from 'react-router-dom'
 import '../../styles/components/layout/Sidebar.css'
+import { useAuth } from '../../contexts/AuthContext';
 
 function Sidebar({ activePage }) {
+
+  const { logout: authLogout } = useAuth();
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    authLogout();
+  };
+
   return (
     <nav className="sidebar">
-      {/* Logo */}
+      {/* LOGO FUTURAMENTE */}
       <div className="sidebar-logo">
         <span>OPFI</span>
       </div>
 
-      {/* Main Nav */}
+      {/* PRINCIPAL */}
       <div className="sidebar-nav">
-        <Link
+        <Link 
           to="/dashboard"
           className={`sidebar-link${activePage === 'dashboard' ? ' active' : ''}`}
           title="Dashboard"
@@ -48,7 +57,7 @@ function Sidebar({ activePage }) {
         </Link>
       </div>
 
-      {/* Bottom Nav */}
+      {/* CONFIGURACAO E LOGOUT */}
       <div className="sidebar-nav-bottom">
         <Link
           to="/settings"
@@ -57,9 +66,9 @@ function Sidebar({ activePage }) {
         >
           <span className="material-symbols-outlined">settings</span>
         </Link>
-        <Link to="/login" className="sidebar-link" title="Sair">
+        <button onClick={handleLogout} className="sidebar-link" title="Sair">
           <span className="material-symbols-outlined">logout</span>
-        </Link>
+        </button>
       </div>
     </nav>
   )
