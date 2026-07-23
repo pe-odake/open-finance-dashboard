@@ -1,6 +1,53 @@
 import '../styles/pages/AccountsPage.css'
+import { useState, useEffect } from 'react';
+import AccountCard from '../components/AccountCard'
+import AddAccountModal from '../components/AddAccountModal'
+import { listarContas, criarConta } from '../api/contas';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 function AccountsPage() {
+
+  const [contas, setContas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { user } = useAuth();
+  const userId = user?.id;
+
+  // PEGAR AS CONTAR - GET
+
+  useEffect(() => {
+    async function carregarContas() {
+      try {
+        const response = await listarContas();
+        setContas(response.content || response); 
+      } catch (error) {
+        console.error("Erro ao buscar contas:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    carregarContas();
+  }, []); 
+
+  const contasFiltradas = contas.filter((conta) => !userId || conta.usuarioId === userId);
+
+  // CRIAR/CONECTAR CONTAS - POST
+
+  const handleAddAccount = async (novaConta) => {
+    try {
+      console.log(novaConta);
+      const contaCriada = await criarConta(novaConta); 
+      setContas((contasAntigas) => [...contasAntigas, contaCriada]);
+      console.log("Conta criada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar conta:", error);
+      alert("Não foi possível cadastrar a conta.");
+    } finally {
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <div className="accounts-page">
       {/* Header */}
@@ -9,103 +56,33 @@ function AccountsPage() {
           <h1>Contas</h1>
           <p>Gerencie suas conexões financeiras.</p>
         </div>
-        <button className="btn-primary-sm">
+        <button className="btn-primary-sm" onClick={() => setIsModalOpen(true)}>
           <span className="material-symbols-outlined">add</span>
           <span>Adicionar conta</span>
         </button>
       </div>
 
-      {/* Accounts Grid */}
+      {/* CONTAS */}
       <div className="accounts-grid">
-        {/* Itaú */}
-        <div className="account-card">
-          <div className="account-card-top">
-            <div className="account-card-bank">
-              <div className="account-card-icon" style={{ backgroundColor: 'var(--color-attention-soft)', color: 'var(--color-attention)' }}>
-                <span className="material-symbols-outlined">account_balance</span>
-              </div>
-              <span className="account-card-bank-name">Itaú</span>
-            </div>
-            <button className="account-card-menu">
-              <span className="material-symbols-outlined">more_vert</span>
-            </button>
-          </div>
-          <div className="account-card-status">
-            <span className="account-status-dot"></span>
-            <span className="account-status-text">Sincronizado</span>
-          </div>
-          <div>
-            <div className="account-card-balance-label">Saldo atual</div>
-            <div className="account-card-balance">R$ 4.250,12</div>
-          </div>
-          <div className="account-card-sync">Última sinc. há 2 horas</div>
-          <div className="account-card-actions">
-            <button className="btn-sync">Sincronizar</button>
-            <button className="btn-delete">
-              <span className="material-symbols-outlined">delete</span>
-            </button>
-          </div>
-        </div>
 
-        {/* Nubank */}
-        <div className="account-card">
-          <div className="account-card-top">
-            <div className="account-card-bank">
-              <div className="account-card-icon" style={{ backgroundColor: '#E8E1F4', color: '#8A05BE' }}>
-                <span className="material-symbols-outlined">credit_card</span>
-              </div>
-              <span className="account-card-bank-name">Nubank</span>
-            </div>
-            <button className="account-card-menu">
-              <span className="material-symbols-outlined">more_vert</span>
-            </button>
+        {contasFiltradas.length === 0 ? (
+          <div className="accounts-empty">
+            <span className="material-symbols-outlined accounts-empty-icon">account_balance</span>
+            <p className="accounts-empty-title">Nenhuma conta conectada</p>
+            <p className="accounts-empty-text">Adicione uma conta para visualizar seu saldo e transações.</p>
           </div>
-          <div className="account-card-status">
-            <span className="account-status-dot"></span>
-            <span className="account-status-text">Sincronizado</span>
-          </div>
-          <div>
-            <div className="account-card-balance-label">Saldo atual</div>
-            <div className="account-card-balance">R$ 12.840,50</div>
-          </div>
-          <div className="account-card-sync">Última sinc. há 5 min</div>
-          <div className="account-card-actions">
-            <button className="btn-sync">Sincronizar</button>
-            <button className="btn-delete">
-              <span className="material-symbols-outlined">delete</span>
-            </button>
-          </div>
-        </div>
+        ) : (
+          contasFiltradas.map((conta) => (
+            <AccountCard 
+              key={conta.id}
+              bankName={conta.nomeBanco}
+              balance={conta.saldo != null ? Number(conta.saldo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : "R$ 0,00"}
+              syncText="Última sinc. há 2 horas"
+              statusText="Sincronizado"
+            />
+          ))
+        )}
 
-        {/* Banco do Brasil */}
-        <div className="account-card">
-          <div className="account-card-top">
-            <div className="account-card-bank">
-              <div className="account-card-icon" style={{ backgroundColor: '#FFF5C1', color: '#F9C300' }}>
-                <span className="material-symbols-outlined">savings</span>
-              </div>
-              <span className="account-card-bank-name">Banco do Brasil</span>
-            </div>
-            <button className="account-card-menu">
-              <span className="material-symbols-outlined">more_vert</span>
-            </button>
-          </div>
-          <div className="account-card-status">
-            <span className="account-status-dot"></span>
-            <span className="account-status-text">Sincronizado</span>
-          </div>
-          <div>
-            <div className="account-card-balance-label">Saldo atual</div>
-            <div className="account-card-balance">R$ 2.115,00</div>
-          </div>
-          <div className="account-card-sync">Última sinc. ontem</div>
-          <div className="account-card-actions">
-            <button className="btn-sync">Sincronizar</button>
-            <button className="btn-delete">
-              <span className="material-symbols-outlined">delete</span>
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* Bottom Section */}
@@ -151,6 +128,12 @@ function AccountsPage() {
           <button className="btn-outline-sm">Saber mais</button>
         </div>
       </div>
+
+      <AddAccountModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddAccount}
+      />
     </div>
   )
 }
