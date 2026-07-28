@@ -2,7 +2,7 @@ import '../styles/pages/AccountsPage.css'
 import { useState, useEffect } from 'react';
 import AccountCard from '../components/AccountCard'
 import AddAccountModal from '../components/AddAccountModal'
-import { listarContas, criarConta } from '../api/contas';
+import { listarContas, criarConta } from '../services/contas';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 function AccountsPage() {
@@ -78,7 +78,6 @@ function AccountsPage() {
               bankName={conta.nomeBanco}
               balance={conta.saldo != null ? Number(conta.saldo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : "R$ 0,00"}
               syncText="Última sinc. há 2 horas"
-              statusText="Sincronizado"
             />
           ))
         )}

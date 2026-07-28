@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { use, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import '../styles/pages/LoginPage.css'
-import '../api/auth';
+import '../services/auth';
 
 function RegisterPage() {
   const navigate = useNavigate();
