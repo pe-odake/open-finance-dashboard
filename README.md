@@ -1,161 +1,116 @@
 # Open Finance Dashboard — Frontend
 
-Interface web para visualização e gestão de dados financeiros consolidados, simulando o ecossistema de Open Finance brasileiro. O usuário conecta múltiplas contas bancárias fictícias e acompanha saldo, transações e gastos em um painel unificado e em tempo real.
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?logo=javascript&logoColor=black)
+![Axios](https://img.shields.io/badge/Axios-1.x-5A29E4?logo=axios&logoColor=white)
+![React Router](https://img.shields.io/badge/React%20Router-7-CA4245?logo=reactrouter&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
+
+Interface web para visualização e gestão de dados financeiros consolidados, simulando o ecossistema de Open Finance brasileiro. O usuário conecta múltiplas contas bancárias fictícias e acompanha saldo, transações e gastos em um painel unificado.
 
 ---
 
-## Para que serve
+## Stack
 
-O frontend é a camada de apresentação do Open Finance Dashboard. Ele consome a API REST do backend (Spring Boot) e exibe dados financeiros de múltiplas contas de forma centralizada. O objetivo é simular a experiência de um agregador financeiro no modelo Open Finance do Banco Central do Brasil, onde o usuário tem controle total sobre quais dados compartilha e pode revogar acessos a qualquer momento.
+| Tecnologia | Uso |
+|---|---|
+| **React 19** | Biblioteca principal de UI |
+| **JavaScript (ES2022)** | Linguagem — sem TypeScript |
+| **React Router DOM 7** | Roteamento de páginas (SPA) |
+| **Axios 1.x** | Cliente HTTP com interceptors para JWT |
+| **Vite 8** | Bundler e servidor de desenvolvimento |
+| **react-bancos** | Logos de bancos brasileiros |
+| **oxlint** | Linter rápido |
 
 ---
 
 ## Funcionalidades
 
-### Autenticação
+### ✅ Implementadas
+
+#### Autenticação
 - Tela de login com e-mail e senha
 - Tela de cadastro de novo usuário
-- Armazenamento do JWT em memória (sem localStorage) para maior segurança
-- Renovação automática de token via refresh token
-- Redirecionamento para login ao expirar a sessão
+- Armazenamento do JWT em `localStorage`
+- Redirecionamento automático para login em rotas protegidas
 
-### Dashboard (visão geral)
+#### Contas
+- Listagem de todas as contas conectadas com nome do banco, tipo e saldo
+- Botão para adicionar nova conta fictícia (simulando o fluxo de consentimento Open Finance)
+- Logos reais dos bancos brasileiros via `react-bancos`
+
+#### Transações
+- Tabela paginada com todas as transações de todas as contas
+- Paginação server-side com controle de página
+- Cada linha exibe: nome da transação, data, conta de origem, valor e categoria
+- Valores negativos em coral, positivos em teal
+- Categorias exibidas como tags (Alimentação, Transporte, Lazer, Saúde, Renda, Mercado)
+- Side sheet com detalhes da transação ao clicar em uma linha
+
+### 🚧 Em desenvolvimento
+
+#### Dashboard (visão geral)
 - Saudação personalizada com nome do usuário
 - Patrimônio consolidado somando todas as contas conectadas
 - Cards de métricas: saldo total, entradas e saídas do mês corrente
 - Lista de contas com saldo individual de cada uma
-- Gráfico de linha com evolução patrimonial dos últimos 6 meses (Recharts LineChart)
-- Indicador de variação mensal (positivo em teal, negativo em coral)
-- Banner de notificação em tempo real via SSE quando a sincronização automática é concluída
+- Gráfico de linha com evolução patrimonial dos últimos 6 meses
+- Banner de notificação de sincronização
 
-### Contas
-- Listagem de todas as contas conectadas com nome do banco, tipo e saldo
-- Botão para adicionar nova conta fictícia (simulando o fluxo de consentimento Open Finance)
-- Botão de sincronização manual por conta
-- Status de cada conta (sincronizado, erro, aguardando)
+> UI mockada com dados estáticos — integração com API pendente.
 
-### Transações
-- Tabela paginada com todas as transações de todas as contas
-- Paginação server-side via TanStack Query (requisição ao backend por página)
-- Filtros combinados: busca por texto, conta, categoria e período (mês/ano)
-- Cada linha exibe: nome da transação, data, conta de origem, valor e categoria
-- Valores negativos em coral, positivos em teal
-- Categorias exibidas como tags (Alimentação, Transporte, Lazer, Saúde, Renda, Outros)
-
-### Análise de gastos
-- Gráfico de pizza por categoria do mês selecionado (Recharts PieChart)
+#### Análise de gastos
+- Gráfico donut por categoria do mês selecionado
 - Barras de progresso por categoria mostrando proporção do gasto total
-- Comparativo mês a mês: gráfico de barras agrupadas com entradas vs saídas (Recharts BarChart)
-- Seletor de mês para navegar entre períodos
+- Comparativo mês a mês: gráfico de barras com entradas vs saídas
 
-### Consentimentos
+> UI mockada com dados estáticos — integração com API pendente.
+
+#### Consentimentos
 - Lista de todos os consentimentos ativos e revogados
-- Informações de cada consentimento: banco, permissões concedidas (leitura de saldo, leitura de transações, leitura de fatura) e data de expiração
-- Botão para revogar um consentimento ativo (com modal de confirmação)
-- Histórico de consentimentos revogados com data de revogação
+- Informações de cada consentimento: banco, permissões concedidas e data de expiração
+- Botão para revogar um consentimento ativo
+- Histórico de consentimentos revogados
 
-### Notificações em tempo real
-- Conexão SSE (Server-Sent Events) com o backend ao carregar o app
-- Banner não obstrusivo no topo da tela quando a sincronização automática é concluída
-- Banner de erro quando uma sincronização falha para alguma conta
+> UI mockada com dados estáticos — integração com API pendente.
+
+#### Filtros de transações
+- Busca por texto, conta, categoria e período (mês/ano)
+
+> Elementos visuais presentes na UI — lógica de filtragem pendente.
+
+#### Renovação de token (refresh token)
+- Renovação automática do JWT antes de expirar
+- Redirecionamento para login ao expirar a sessão
+
+#### Notificações em tempo real
+- Conexão SSE (Server-Sent Events) com o backend
+- Banner de notificação quando a sincronização automática é concluída
 - Reconexão automática ao SSE em caso de queda
 
-### Download de extrato
+#### Download de extrato
 - Botão na tela de transações para solicitar geração de extrato
 - Requisição assíncrona ao backend (processado em background)
-- Notificação quando o arquivo está pronto, com link de download (PDF ou CSV)
+- Notificação quando o arquivo está pronto, com link de download
+
+#### Configurações
+- Perfil editável lendo dados do usuário logado
+- Toggles funcionais para sincronização e notificações
+- Logout com limpeza de sessão
 
 ---
 
-## Design
-
-| Atributo | Decisão |
-|---|---|
-| Fonte | Inter (Google Fonts) — display 28px, body 14px, mono para valores |
-| Cor primária | Azul institucional `#185FA5` |
-| Cor positiva | Teal `#0F6E56` |
-| Cor negativa | Coral `#993C1D` |
-| Fundo | Cinza frio `#FAFAF9` |
-| Cards | Branco `#FFFFFF` com borda `0.5px` |
-| Breakpoints | Mobile `≤767px`, Tablet `768–1023px`, Desktop `≥1024px` |
-| Navegação desktop | Sidebar lateral fixa de 72px com ícones |
-| Navegação mobile | Bottom navigation bar com 5 ícones |
-| Navegação tablet | Sidebar colapsada (ícones, sem labels) |
-
----
-
-## Tecnologias
-
-| Tecnologia | Versão | Uso |
-|---|---|---|
-| React | 19 | Biblioteca principal de UI |
-| JavaScript (ES2022) | — | Sem TypeScript, conforme decisão do projeto |
-| React Router DOM | 7 | Roteamento de páginas (SPA) |
-| TanStack Query | 5 | Gerenciamento de estado servidor, cache e paginação |
-| Recharts | 2 | Gráficos (linha, pizza, barras) |
-| Axios | 1.x | Cliente HTTP com interceptors para JWT |
-| React Hook Form | 7 | Formulários de login e cadastro |
-| Vite | 8 | Bundler e servidor de desenvolvimento |
-
----
-
-## Estrutura de pastas
+## Arquitetura
 
 ```
-open-finance-frontend/
-├── public/
-│   └── favicon.ico
-├── src/
-│   ├── api/
-│   │   ├── axiosInstance.js       # Axios configurado com interceptors JWT
-│   │   ├── authApi.js             # Login, cadastro, refresh token
-│   │   ├── accountsApi.js         # CRUD de contas
-│   │   ├── transactionsApi.js     # Listagem e filtros de transações
-│   │   ├── consentApi.js          # Listagem e revogação de consentimentos
-│   │   └── reportsApi.js          # Solicitação e download de extratos
-│   ├── components/
-│   │   ├── layout/
-│   │   │   ├── Sidebar.jsx        # Navegação lateral (desktop/tablet)
-│   │   │   ├── BottomNav.jsx      # Navegação inferior (mobile)
-│   │   │   └── AppLayout.jsx      # Wrapper com Sidebar + conteúdo
-│   │   ├── ui/
-│   │   │   ├── MetricCard.jsx     # Card de métrica (label + valor)
-│   │   │   ├── StatusChip.jsx     # Chip colorido de status
-│   │   │   ├── CategoryTag.jsx    # Tag de categoria de transação
-│   │   │   ├── SyncBanner.jsx     # Banner de notificação SSE
-│   │   │   ├── Modal.jsx          # Modal reutilizável
-│   │   │   └── EmptyState.jsx     # Estado vazio para listas
-│   │   ├── charts/
-│   │   │   ├── PatrimonyLineChart.jsx   # Evolução patrimonial
-│   │   │   ├── CategoryPieChart.jsx     # Gastos por categoria
-│   │   │   └── MonthlyBarChart.jsx      # Entradas vs saídas
-│   │   └── transactions/
-│   │       ├── TransactionTable.jsx     # Tabela paginada
-│   │       └── TransactionFilters.jsx   # Filtros combinados
-│   ├── hooks/
-│   │   ├── useAuth.js             # Contexto e hook de autenticação
-│   │   ├── useSSE.js              # Hook para conexão Server-Sent Events
-│   │   └── usePagination.js       # Hook de controle de paginação
-│   ├── pages/
-│   │   ├── LoginPage.jsx
-│   │   ├── RegisterPage.jsx
-│   │   ├── DashboardPage.jsx
-│   │   ├── AccountsPage.jsx
-│   │   ├── TransactionsPage.jsx
-│   │   ├── AnalysisPage.jsx
-│   │   ├── ConsentsPage.jsx
-│   │   └── SettingsPage.jsx
-│   ├── context/
-│   │   └── AuthContext.jsx        # Contexto global de autenticação
-│   ├── utils/
-│   │   ├── formatCurrency.js      # Formata valores para BRL
-│   │   └── formatDate.js          # Formata datas em pt-BR
-│   ├── App.jsx                    # Rotas e providers globais
-│   └── main.jsx                   # Ponto de entrada
-├── .env                           # VITE_API_BASE_URL
-├── vite.config.js
-└── package.json
+┌──────────────┐     Axios + JWT      ┌──────────────┐     Spring Boot     ┌──────────────┐
+│  React SPA   │ ──────────────────── │   API REST   │ ──────────────────  │  PostgreSQL  │
+│ localhost:5173│                      │ localhost:8080│                     │              │
+└──────────────┘                      └──────────────┘                     └──────────────┘
 ```
+
+O frontend é uma SPA React que consome a API REST do backend Spring Boot. A autenticação é feita via JWT Bearer Token. O Axios é configurado com interceptors que anexam o token automaticamente em todas as requisições (exceto rotas `/auth`).
 
 ---
 
@@ -165,15 +120,11 @@ open-finance-frontend/
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/pe-odake/open-finance-frontend.git
-cd open-finance-frontend
+git clone https://github.com/pe-odake/open-finance-dashboard.git
+cd open-finance-dashboard
 
 # Instalar dependências
 npm install
-
-# Configurar variável de ambiente
-cp .env.example .env
-# Editar .env: VITE_API_BASE_URL=http://localhost:8080
 
 # Rodar em desenvolvimento
 npm run dev
@@ -186,24 +137,101 @@ Acesse `http://localhost:5173`
 npm run build
 ```
 
----
-
-## Variáveis de ambiente
+### Variáveis de ambiente
 
 | Variável | Descrição | Exemplo |
 |---|---|---|
-| `VITE_API_BASE_URL` | URL base da API REST do backend | `http://localhost:8080` |
+| `VITE_PROD` | Flag para ambiente de produção | `true` ou `false` |
+| `VITE_URL_DEPLOY` | URL da API em produção | `https://api.exemplo.com` |
+| `VITE_URL_LOCAL` | URL da API em desenvolvimento | `http://localhost:8080` |
 
----
-
-## Scripts disponíveis
+### Scripts disponíveis
 
 | Comando | Descrição |
 |---|---|
 | `npm run dev` | Inicia o servidor de desenvolvimento |
 | `npm run build` | Gera o build de produção em `/dist` |
 | `npm run preview` | Visualiza o build de produção localmente |
-| `npm run lint` | Executa o ESLint |
+| `npm run lint` | Executa o oxlint |
+
+---
+
+## Estrutura de pastas
+
+```
+open-finance-dashboard/
+├── src/
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── AppLayout.jsx        # Wrapper com Sidebar, Header e conteúdo
+│   │   │   ├── Header.jsx           # Cabeçalho da aplicação
+│   │   │   ├── MobileBottomNav.jsx  # Navegação inferior (mobile)
+│   │   │   └── Sidebar.jsx          # Navegação lateral (desktop)
+│   │   ├── AccountCard.jsx          # Card de exibição de conta
+│   │   └── AddAccountModal.jsx      # Modal de inserção de conta
+│   ├── contexts/
+│   │   └── AuthContext.jsx          # Contexto global de autenticação
+│   ├── pages/
+│   │   ├── AccountsPage.jsx
+│   │   ├── AnalysisPage.jsx
+│   │   ├── ConsentsPage.jsx
+│   │   ├── DashboardPage.jsx
+│   │   ├── LoginPage.jsx
+│   │   ├── RegisterPage.jsx
+│   │   ├── SettingsPage.jsx
+│   │   └── TransactionsPage.jsx
+│   ├── services/
+│   │   ├── api.js                   # Configuração base do Axios
+│   │   ├── auth.js                  # Requisições de autenticação
+│   │   ├── contas.js                # Requisições de contas
+│   │   └── transacoes.js            # Requisições de transações
+│   ├── styles/
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   │   ├── AppLayout.css
+│   │   │   │   ├── Header.css
+│   │   │   │   ├── MobileBottomNav.css
+│   │   │   │   └── Sidebar.css
+│   │   │   ├── AccountCard.css
+│   │   │   └── AddAccountModal.css
+│   │   ├── pages/
+│   │   │   ├── AccountsPage.css
+│   │   │   ├── AnalysisPage.css
+│   │   │   ├── ConsentsPage.css
+│   │   │   ├── DashboardPage.css
+│   │   │   ├── LoginPage.css
+│   │   │   ├── SettingsPage.css
+│   │   │   └── TransactionsPage.css
+│   │   ├── App.css
+│   │   └── index.css
+│   ├── App.jsx                    # Definição das rotas e componente principal
+│   └── main.jsx                   # Ponto de entrada da aplicação
+├── .env                           # Variáveis de ambiente
+├── .gitignore
+├── .oxlintrc.json
+├── index.html
+├── package.json
+├── package-lock.json
+├── README.md
+└── vite.config.js
+```
+
+---
+
+## Roadmap
+
+- [x] Autenticação (login e cadastro)
+- [x] Listagem e criação de contas
+- [x] Tabela paginada de transações com side sheet de detalhes
+- [ ] Dashboard com dados reais da API
+- [ ] Análise de gastos integrada ao backend
+- [ ] Gerenciamento de consentimentos funcional
+- [ ] Filtros funcionais na tela de transações
+- [ ] Renovação automática de token (refresh token)
+- [ ] Notificações em tempo real (SSE)
+- [ ] Download de extratos
+- [ ] Configurações de perfil editáveis
+- [ ] Sincronização manual e automática de contas
 
 ---
 
