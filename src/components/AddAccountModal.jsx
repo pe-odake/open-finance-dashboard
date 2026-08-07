@@ -52,7 +52,7 @@ function AddAccountModal({ isOpen, onClose, onSubmit }) {
               <option value="ITAU">Itaú</option>
               <option value="BRADESCO">Bradesco</option>
               <option value="NUBANK">Nubank</option>
-              <option value="SANTADER">Santander</option>
+              <option value="SANTANDER">Santander</option>
               <option value="CAIXA">Caixa</option>
               <option value="BANCO_DO_BRASIL">Banco do Brasil</option>
               <option value="INTER">Inter</option>

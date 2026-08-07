@@ -1,8 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import '../styles/pages/LoginPage.css'
-import '../services/auth';
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -11,32 +10,54 @@ function RegisterPage() {
   const [nome, setNome] = useState("");
   const [login, setLogin] = useState("");
   const [senha, setSenha] = useState("");
-  // const [senhaConfirmada, setSenhaConfirmada] = useState("");
+  const [showSenha, setShowSenha] = useState(false);
   const perfil = "DEFAULT";
     
-  const [loginError, setLoginError] = useState("");
+  const [registerError, setRegisterError] = useState("");
+
+  const extractErrorMessage = (error) => {
+    if (!error.response) {
+      return "Erro ao conectar com o servidor.";
+    }
+
+    const data = error.response.data;
+
+    // Se o backend enviou uma string simples
+    if (typeof data === "string") {
+      return data;
+    }
+
+    // Se o backend enviou um objeto
+    if (data && typeof data === "object") {
+      if (typeof data.mensagem === "string") return data.mensagem;
+      if (typeof data.message === "string") return data.message;
+
+      // Se for uma lista de erros de validação: [{ campo, mensagem }, ...]
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map(item => item.mensagem || item.message || JSON.stringify(item)).join(", ");
+      }
+    }
+
+    return "Erro ao criar conta. Verifique os dados.";
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoginError("");
+    setRegisterError("");
 
-    // if (senha == senhaConfirmada) {
-    //   console.log("SENHA IGUAL");
-    // }
-    // else {
-    //   console.log("SENHAS DIFERENTES");
-    //   // PARA E NA TELA PEDE PARA ESCREVER A MESMA SENHA
-    // }
+    if (!nome || !login || !senha) {
+      setRegisterError("Por favor, preencha todos os campos.");
+      return;
+    }
 
     try {
-      await authRegister({nome, login, senha, perfil});
+      await authRegister({ nome, login, senha, perfil });
       navigate("/dashboard");
-
     } catch (error) {
-      console.error(error);
-      setLoginError(error.message || "Erro ao conectar com o servidor.");
+      console.error("Erro no registro:", error);
+      setRegisterError(extractErrorMessage(error));
     }
-  }
+  };
 
   return (
     <div className="login-page">
@@ -68,6 +89,13 @@ function RegisterPage() {
             <h2>Criar sua conta</h2>
             <p>Preencha os dados abaixo para começar.</p>
           </div>
+
+          {registerError && (
+            <div className="login-error-message">
+              <span className="material-symbols-outlined">error</span>
+              <span>{registerError}</span>
+            </div>
+          )}
 
           <form onSubmit={handleRegister}>
             <div className="login-fields">
@@ -107,44 +135,23 @@ function RegisterPage() {
                     className="form-input"
                     id="reg-password"
                     name="password"
-                    type="password"
+                    type={showSenha ? "text" : "password"}
                     onChange={(e) => setSenha(e.target.value)}
                     value={senha}
                     placeholder="••••••••"
                   />
-                  <button type="button" className="input-icon-btn">
-                    <span className="material-symbols-outlined">visibility_off</span>
+                  <button 
+                    type="button" 
+                    className="input-icon-btn"
+                    onClick={() => setShowSenha(!showSenha)}
+                    title={showSenha ? "Ocultar senha" : "Mostrar senha"}
+                  >
+                    <span className="material-symbols-outlined">
+                      {showSenha ? "visibility" : "visibility_off"}
+                    </span>
                   </button>
                 </div>
-                {/* INDICADOR DE FORCA DA SENHA */}
-                {/* <div className="password-strength">
-                  <div className="password-strength-bar">
-                    <div
-                      className="password-strength-fill"
-                      style={{ width: '60%', backgroundColor: 'var(--color-attention)' }}
-                    ></div>
-                  </div>
-                  <span className="password-strength-text" style={{ color: 'var(--color-attention)' }}>
-                    Média
-                  </span>
-                </div> */}
               </div>
-
-              {/* CONFIRMACAO SENHA */}
-              {/* <div className="form-field">
-                <label htmlFor="confirm-password">Confirmar senha</label>
-                <div className="input-with-icon">
-                  <input
-                    className="form-input"
-                    id="confirm-password"
-                    name="confirmPassword"
-                    type="password"
-                    onChange={(e) => setsenhaConfirmada(e.target.value)}
-                    value={senhaConfirmada}
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div> */}
             </div>
 
             <div className="login-actions">

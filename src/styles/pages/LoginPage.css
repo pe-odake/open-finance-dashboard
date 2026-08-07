@@ -148,6 +148,25 @@
   color: var(--color-secondary);
 }
 
+.login-error-message {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+  border-radius: var(--radius-default);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: var(--spacing-md);
+}
+
+.login-error-message .material-symbols-outlined {
+  font-size: 20px;
+  color: var(--color-error);
+  flex-shrink: 0;
+}
+
 .login-fields {
   display: flex;
   flex-direction: column;
@@ -228,6 +247,7 @@
   display: flex;
   align-items: center;
   transition: color 0.15s;
+  cursor: pointer;
 }
 
 .input-icon-btn:hover {

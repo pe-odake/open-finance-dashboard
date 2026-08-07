@@ -9,19 +9,54 @@ function LoginPage() {
 
   const [login, setLogin] = useState("");
   const [senha, setSenha] = useState("");
+  const [showSenha, setShowSenha] = useState(false);
   const [loginError, setLoginError] = useState("");
+
+  const extractErrorMessage = (error) => {
+    if (!error.response) {
+      return "Erro ao conectar com o servidor.";
+    }
+
+    const data = error.response.data;
+
+    // Se o backend enviou uma string simples
+    if (typeof data === "string") {
+      return data;
+    }
+
+    // Se o backend enviou um objeto
+    if (data && typeof data === "object") {
+      if (typeof data.mensagem === "string") return data.mensagem;
+      if (typeof data.message === "string") return data.message;
+
+      // Se for uma lista de erros de validação: [{ campo, mensagem }, ...]
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map(item => item.mensagem || item.message || JSON.stringify(item)).join(", ");
+      }
+    }
+
+    if (error.response.status === 400 || error.response.status === 401 || error.response.status === 403) {
+      return "E-mail ou senha incorretos.";
+    }
+
+    return "Erro ao realizar login. Verifique os dados.";
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError("");
 
+    if (!login || !senha) {
+      setLoginError("Por favor, preencha todos os campos.");
+      return;
+    }
+
     try {
       await authLogin({ login, senha });
       navigate("/dashboard");
-
     } catch (error) {
-      console.error(error);
-      setLoginError(error.message || "Erro ao conectar com o servidor.");
+      console.error("Erro no login:", error);
+      setLoginError(extractErrorMessage(error));
     }
   };
 
@@ -56,6 +91,13 @@ function LoginPage() {
             <p>Bem-vindo de volta! Por favor, insira seus dados.</p>
           </div>
 
+          {loginError && (
+            <div className="login-error-message">
+              <span className="material-symbols-outlined">error</span>
+              <span>{loginError}</span>
+            </div>
+          )}
+
           <form onSubmit={handleLogin}>
             <div className="login-fields">
 
@@ -84,13 +126,20 @@ function LoginPage() {
                     className="form-input"
                     id="password"
                     name="senha"
-                    type="password"
+                    type={showSenha ? "text" : "password"}
                     value={senha}
                     onChange={(e) => setSenha(e.target.value)}
                     placeholder="••••••••"
                   />
-                  <button type="button" className="input-icon-btn">
-                    <span className="material-symbols-outlined">visibility_off</span>
+                  <button 
+                    type="button" 
+                    className="input-icon-btn"
+                    onClick={() => setShowSenha(!showSenha)}
+                    title={showSenha ? "Ocultar senha" : "Mostrar senha"}
+                  >
+                    <span className="material-symbols-outlined">
+                      {showSenha ? "visibility" : "visibility_off"}
+                    </span>
                   </button>
                 </div>
               </div>

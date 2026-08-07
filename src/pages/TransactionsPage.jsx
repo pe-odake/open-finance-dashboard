@@ -243,7 +243,7 @@ function TransactionsPage() {
               onClick={paginaAnterior}
               disabled={paginaAtual === 0}
             >
-              ← Anterior
+              Anterior
             </button>
 
             {Array.from({ length: totalPaginas }, (_, index) => (
@@ -261,7 +261,7 @@ function TransactionsPage() {
               onClick={proximaPagina}
               disabled={paginaAtual >= totalPaginas - 1}
             >
-              Próxima →
+              Próxima
             </button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext.jsx'
+
 import AppLayout from './components/layout/AppLayout.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
@@ -11,57 +12,54 @@ import ConsentsPage from './pages/ConsentsPage.jsx'
 import SettingsPage from './pages/SettingsPage.jsx'
 
 function PrivateRoute({ children }) {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth()
 
-  if (loading) return null;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (loading) return null
+  if (!isAuthenticated) return <Navigate to="/login" replace />
 
-  return children;
+  return children
 }
+
+function SmartRedirect() {
+  const { isAuthenticated, loading } = useAuth()
+
+  if (loading) return null
+
+  return isAuthenticated
+    ? <Navigate to="/dashboard" replace />
+    : <Navigate to="/login" replace />
+}
+
+const privateRoutes = [
+  { path: '/dashboard', page: 'dashboard', element: <DashboardPage /> },
+  { path: '/accounts', page: 'accounts', element: <AccountsPage /> },
+  { path: '/transactions', page: 'transactions', element: <TransactionsPage /> },
+  { path: '/analysis', page: 'analysis', element: <AnalysisPage /> },
+  { path: '/consents', page: 'consents', element: <ConsentsPage /> },
+  { path: '/settings', page: 'settings', element: <SettingsPage /> },
+]
 
 function App() {
   return (
     <Routes>
-      {/* AUTH */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/dashboard" element={
-        <PrivateRoute>
-          <AppLayout activePage="dashboard"><DashboardPage /></AppLayout>
-        </PrivateRoute>
-      } />
-      <Route path="/accounts" element={
-        <PrivateRoute>
-          <AppLayout activePage="accounts"><AccountsPage /></AppLayout>
-        </PrivateRoute>
-      } />
-      <Route path="/transactions" element={
-        <PrivateRoute>
-          <AppLayout activePage="transactions"><TransactionsPage /></AppLayout>
-        </PrivateRoute>
-      } />
-      <Route path="/analysis" element={
-        <PrivateRoute>
-          <AppLayout activePage="analysis"><AnalysisPage /></AppLayout>
-        </PrivateRoute>
-      } />
-      <Route path="/consents" element={
-        <PrivateRoute>
-          <AppLayout activePage="consents"><ConsentsPage /></AppLayout>
-        </PrivateRoute>
-      } />
-      <Route path="/settings" element={
-        <PrivateRoute>
-          <AppLayout activePage="settings"><SettingsPage /></AppLayout>
-        </PrivateRoute>
-      } />
+      {privateRoutes.map(({ path, page, element }) => (
+        <Route
+          key={path}
+          path={path}
+          element={
+            <PrivateRoute>
+              <AppLayout activePage={page}>{element}</AppLayout>
+            </PrivateRoute>
+          }
+        />
+      ))}
 
-      {/* PADRAO */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<SmartRedirect />} />
     </Routes>
   )
 }
 
 export default App
-
